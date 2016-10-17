@@ -35,6 +35,23 @@ void ResPrint(pNode pBegin)
 		cout<<pBegin->_data<<"->";
 	}
 }
+
+void Test1()
+{
+	
+	Node *h = new Node(1, NULL);
+	Node *g = new Node(0, h);
+	Node *f = new Node(9, g);
+	Node *e = new Node(7, f);
+
+	Node *d = new Node(5, e);
+	Node *c = new Node(3, d);
+	Node *b = new Node(2, c);
+	Node *a = new Node(4, b);
+
+	show(a);
+	ResPrint(a);
+}
 /*
 删除一个无头链表的非尾节点（偷梁换柱）
 */
@@ -53,8 +70,8 @@ void DelNopHead_NoneTail(pNode& pos)
 
 pNode Find(pNode pHead,int key)
 {
-	//if(pHead==NULL)
-	//	return NULL;
+	if(pHead==NULL)
+		return NULL;
 	pNode cur = pHead;
 	while(cur->_data != key)
 	{
@@ -83,9 +100,44 @@ void Test2()
 	show(a);
 }
 
-void Test1()
+/*
+ * 快排
+ * 枢轴 左边比它小右边比它大 递归 
+ */
+
+pNode GetPartion(pNode pHead,pNode pEnd)
 {
+	pNode prev = pHead;
+	pNode cur = pHead->_next;
+	pNode key = pHead;
 	
+	while(cur != pEnd)
+	{
+		if(cur->_data < key->_data)
+		{
+			prev = prev->_next;
+			swap(cur->_data,prev->_data);
+		}
+			cur = cur->_next;
+	}
+	swap(prev->_data,pHead->_data);//prev->_data = key->_data;
+	return prev;
+}
+void QuickSort(pNode pHead,pNode pEnd)
+{
+	if( pEnd->_next == pEnd ||  pHead == NULL )//1 0
+		return;
+
+	if(pHead != pEnd)
+	{
+		pNode Partion = GetPartion(pHead,pEnd);
+		QuickSort(pHead,Partion);
+		QuickSort(Partion->_next,pEnd);
+	}
+}
+
+void TestQuickSort()
+{
 	Node *h = new Node(1, NULL);
 	Node *g = new Node(0, h);
 	Node *f = new Node(9, g);
@@ -97,11 +149,56 @@ void Test1()
 	Node *a = new Node(4, b);
 
 	show(a);
-	ResPrint(a);
+	QuickSort(a,NULL);
+	show(a);	
+}
+//升序
+void BubbleSort(pNode pHead)
+{
+	pNode end = NULL;
+	if(pHead == NULL)
+		return;
+	
+	pNode cur = NULL;
+	pNode prev = NULL;
+	while(pHead != end)
+	{
+		 cur = pHead;
+		 prev = pHead->_next;
+		while(cur != end)
+		{
+			if(cur->_data < prev->_data)
+				swap(cur->_data , prev->_data);
+			prev = cur;
+			cur = cur->_next;
+		}
+		end = prev;
+	}
+	
+}
+void TestBub()
+{
+	Node *h = new Node(1, NULL);
+	Node *g = new Node(0, h);
+	Node *f = new Node(9, g);
+	Node *e = new Node(7, f);
+
+	Node *d = new Node(5, e);
+	Node *c = new Node(3, d);
+	Node *b = new Node(2, c);
+	Node *a = new Node(4, b);
+
+	pNode pBegin = a;
+	show(a);
+	BubbleSort(pBegin);
+	show(a);
+
 }
 int main()
 {
 //	Test1();
-	Test2();
+//	Test2();
+//	TestQuickSort();	
+	TestBub();
 	return 0;
 }

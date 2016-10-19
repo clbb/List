@@ -1,4 +1,5 @@
 #include<iostream>
+
 using namespace std;
 
 typedef struct Node
@@ -120,14 +121,14 @@ pNode GetPartion(pNode pHead,pNode pEnd)
 		}
 			cur = cur->_next;
 	}
-	swap(prev->_data,pHead->_data);//prev->_data = key->_data;
+	swap(prev->_data,key->_data);//prev->_data = key->_data;
 	return prev;
 }
 void QuickSort(pNode pHead,pNode pEnd)
 {
-	if( pEnd->_next == pEnd ||  pHead == NULL )//1 0
+	if( pHead == NULL )//1 0  递归跳出条件：只剩一个节点 pHead->next==PEnd  则还有两个节点
 		return;
-
+//	show(pHead);
 	if(pHead != pEnd)
 	{
 		pNode Partion = GetPartion(pHead,pEnd);
@@ -150,6 +151,7 @@ void TestQuickSort()
 
 	show(a);
 	QuickSort(a,NULL);
+//	cout<<a->_data<<endl;
 	show(a);	
 }
 //升序
@@ -163,8 +165,8 @@ void BubbleSort(pNode pHead)
 	pNode prev = NULL;
 	while(pHead != end)
 	{
-		 cur = pHead;
-		 prev = pHead->_next;
+		 prev = pHead;
+		 cur = pHead->_next;
 		while(cur != end)
 		{
 			if(cur->_data < prev->_data)
@@ -178,27 +180,387 @@ void BubbleSort(pNode pHead)
 }
 void TestBub()
 {
-	Node *h = new Node(1, NULL);
-	Node *g = new Node(0, h);
-	Node *f = new Node(9, g);
-	Node *e = new Node(7, f);
+	pNode h = new Node(1, NULL);
+	pNode g = new Node(0, h);
+	pNode f = new Node(9, g);
+	pNode e = new Node(7, f);
 
-	Node *d = new Node(5, e);
-	Node *c = new Node(3, d);
-	Node *b = new Node(2, c);
-	Node *a = new Node(4, b);
+	pNode d = new Node(5, e);
+	pNode c = new Node(3, d);
+	pNode b = new Node(2, c);
+	pNode a = new Node(4, b);
 
-	pNode pBegin = a;
 	show(a);
-	BubbleSort(pBegin);
+	BubbleSort(a);
 	show(a);
 
+}
+/*
+ *	在一个无头链表的非头节点前插入一个节点
+ *	*/ 
+
+void NoHead_NonepHead(pNode pos,int data)
+
+{
+	if(NULL == pos)
+		return;
+	pNode pnode = new Node(data,NULL);
+
+	pNode prev = pos;
+	pNode cur = pos->_next;
+		
+	prev->_next = pnode;
+	pnode->_next = cur;
+
+	swap(pnode->_data,pos->_data);	
+	
+}
+void TestNoHead_NonepHead()
+{
+	pNode h = new Node(1, NULL);
+	pNode g = new Node(0, h);
+	pNode f = new Node(9, g);
+	pNode e = new Node(7, f);
+
+	pNode d = new Node(5, e);
+	pNode c = new Node(3, d);
+	pNode b = new Node(2, c);
+	pNode a = new Node(4, b);
+	
+	pNode x = new Node(100,NULL);
+	show(a);
+	NoHead_NonepHead(b,100);
+	show(a);
+	
+}
+/*
+ *	逆置链表
+ *	*/
+void _Reverse(pNode& pHead)
+{
+	if(pHead == NULL || pHead->_next == NULL)
+		return;
+	pNode SubHead = pHead->_next;
+	pHead->_next = NULL;
+	while(SubHead != NULL)
+	{
+		pNode ins = SubHead;
+		SubHead = SubHead->_next; 
+		ins->_next = pHead;
+		pHead = ins;
+	}
+}
+
+void Test_Res()
+{
+	pNode h = new Node(1, NULL);
+	pNode g = new Node(0, h);
+	pNode f = new Node(9, g);
+	pNode e = new Node(7, f);
+
+	pNode d = new Node(5, e);
+	pNode c = new Node(3, d);
+	pNode b = new Node(2, c);
+	pNode a = new Node(4, b);
+	
+	show(a);
+	_Reverse(a);
+	show(a);	
+}
+/*	
+*		合并两个有序链表，之后仍然有序
+*		先找到头，newhead 单链表不会回退，头指针走过去就丢了
+*		然后排序
+*		最后把没有排的（一个已经排完，另一个还有很长一串），拼到newhead的后面
+*/
+pNode Merge(pNode pHead1,pNode pHead2)
+{
+	if(pHead1 == NULL || pHead2 == NULL )
+		return pHead1 == NULL ? pHead2:pHead1;
+	
+	pNode cur = pHead1;
+	if(pHead1->_data < pHead2->_data)
+		pHead1 = pHead1->_next;
+	else
+	{
+		cur = pHead2;
+		pHead2 = pHead2->_next;	
+	}
+	pNode newHead = cur;
+
+	while(pHead1 != NULL && pHead2 != NULL)//while(cur != NULL)
+	{
+		if(pHead1->_data < pHead2->_data)
+		{
+			cur->_next = pHead1;
+			pHead1 = pHead1->_next;
+		}		
+		else
+		{
+			cur->_next = pHead2;
+			pHead2 = pHead2->_next;	
+		}
+		cur = cur->_next;
+	}
+	if(pHead1 != NULL)
+	{
+		cur->_next = pHead1;
+	}
+	if(pHead2 != NULL)
+	{
+		cur->_next = pHead2;
+	}
+	return newHead;
+}
+
+void TestMerge()
+{
+	pNode h = new Node(7, NULL);
+	pNode g = new Node(5, h);
+	pNode f = new Node(3, g);
+	pNode e = new Node(1, f);
+
+	pNode d = new Node(8, NULL);
+	pNode c = new Node(6, d);
+	pNode b = new Node(2, c);
+	pNode a = new Node(2, b);
+	
+	//show(a);
+	pNode pBegin = Merge(a,e);
+//	pNode pBegin = Merge(a,NULL);
+//	pNode pBegin = Merge(NULL,e);
+	show(pBegin);
+	
+}
+
+/*
+ *只遍历一边，找中间节点(快慢指针)
+ *
+ *有头指针  快慢指针指向头指针
+ *快的比慢的快一倍时（快的走两步，慢的走一步），快的到了终点，慢的到了一半
+ *还有到三分之一的......起点相同，快的走三步
+ *
+*/
+pNode FindMid(pNode pHead)
+{
+	if(pHead == NULL ||  pHead->_next == NULL)
+		return NULL;
+	
+	pNode fast = pHead;
+	pNode slow = pHead;
+	while(fast && fast->_next)//while(slow != fast)
+	{
+		slow = slow->_next;
+
+		fast = fast->_next;
+		fast = fast->_next;
+	}
+	return slow;
+}
+void TestFindMid()
+{
+
+	pNode h = new Node(1, NULL);
+	pNode g = new Node(0, h);
+	pNode f = new Node(9, g);
+	pNode e = new Node(7, f);
+
+	pNode d = new Node(5, e);
+	pNode c = new Node(3, d);
+	pNode b = new Node(2, c);
+	pNode a = new Node(4, b);
+	
+	show(a);
+	pNode mid = FindMid(a);
+	cout<<mid->_data<<endl;
+}
+
+/*
+ *	查找单链表的倒数第K个节点，只能遍历一次
+ *	*/
+
+pNode Findlast_K(pNode pHead,int k)
+{
+	if(pHead == NULL || k == 0)
+		return NULL;
+	
+	pNode fast = pHead;
+	pNode slow = pHead;
+	int num = k;
+	while(--num)
+	{
+	//	slow = slow->_next;	
+		if(fast->_next)
+		{
+			fast = fast->_next;
+		}
+		else
+			exit(2);
+	}
+	while(fast->_next)
+	{
+		fast = fast->_next;
+		slow = slow->_next;
+	}
+	return slow;
+	
+}
+void TestFindlast_K()
+{
+	pNode h = new Node(1, NULL);
+	pNode g = new Node(0, h);
+	pNode f = new Node(9, g);
+	pNode e = new Node(7, f);
+
+	pNode d = new Node(5, e);
+	pNode c = new Node(3, d);
+	pNode b = new Node(2, c);
+	pNode a = new Node(4, b);
+	
+	show(a);
+	pNode pk = Findlast_K(a,1);
+	cout<<"倒数第1:"<<pk->_data<<endl;
+	pNode pk1 = Findlast_K(a,8);
+	cout<<"倒数第8:"<<pk1->_data<<endl;
+	pNode pk2 = Findlast_K(a,5);
+	cout<<"倒数第5:"<<pk2->_data<<endl;
+	pNode pk3 = Findlast_K (a,9);
+	cout<<"倒数大于链表长度:"<<pk3->_data<<endl;
+}
+
+
+
+/*
+ *	判断带环（快慢指针），时：O(n)	空：O(1)
+ *	*/
+bool Isring(pNode pHead)
+{
+	pNode fast = pHead;
+	pNode slow = pHead;
+	while(fast && fast->_next)
+	{
+		slow = slow->_next;
+		
+		fast = fast->_next;
+		fast = fast->_next;
+		if(fast == slow)
+			break;
+	}
+	return !(fast == NULL || fast->_next == NULL);
+}
+
+void TestIsring()
+{
+	pNode h = new Node(1, NULL);
+	pNode g = new Node(0, h);
+	pNode f = new Node(9, g);
+	pNode e = new Node(7, f);
+
+	pNode d = new Node(5, e);
+	pNode c = new Node(3, d);
+	pNode b = new Node(2, c);
+	pNode a = new Node(4, d);
+	h->_next = d;	
+	cout<<Isring(a)<<endl;
+
+} 
+
+/*
+ *	判断链表是否带环，若带环求长度，求环的入口，  并求每个方法的时/空复杂度
+ *	算法描述：
+ *
+ *	当fast若与slow相遇时，slow肯定没有走遍历完链表，而fast已经在环内循环了n圈(1<=n)。假设slow走了s步，则fast走了2s步（fast步数还等于s 加上在环上多转的n圈），设环长为r，则：
+ *
+ *	2s = s + nr
+ *	s= nr
+ *
+ *	设整个链表长L，入口环与相遇点距离为x，起点到环入口点的距离为a。
+ *	a + x = s
+ *	a + x = nr
+ *	a + x = (n – 1)r +r = (n-1)r + L - a
+ *	a = (n-1)r + (L – a – x)
+ *
+ *	(L – a – x)为相遇点到环入口点的距离，由此可知，从链表头到环入口点等于(n-1)循环内环+相遇点到环入口点，于是我们从链表头、与相遇点分别设一个指针，每次各走一步，两个指针必定相遇，且相遇第一点为环入口点。
+ *	*/
+pNode FindPort(pNode pHead)
+{
+	pNode fast = pHead;
+	pNode slow = pHead;
+	while(fast && fast->_next)
+	{
+		slow = slow->_next;
+		
+		fast = fast->_next;
+		fast = fast->_next;
+		if(fast == slow)
+			break;
+	}
+	if(fast == NULL || fast->_next == NULL)
+		return NULL;
+
+	slow = pHead;
+	while(fast != slow)
+	{	
+		fast = fast->_next;
+		slow = slow->_next;
+	}
+	//return slow;
+
+	//环长
+	pNode cir_len =slow;
+	int count = 1;
+	slow = slow->_next;
+	while( slow != cir_len && ++count)
+	{
+		slow = slow->_next;
+	}
+	cout<<"circle lenth:>"<<count<<endl;
+	return slow;
+	
+}
+void TestFindPort()
+{
+	pNode h = new Node(1, NULL);
+	pNode g = new Node(0, h);
+	pNode f = new Node(9, g);
+	pNode e = new Node(7, f);
+
+	pNode d = new Node(5, e);
+	pNode c = new Node(3, d);
+	pNode b = new Node(2, c);
+	pNode a = new Node(4, d);
+	h->_next = d;	
+	cout<<FindPort(a)->_data<<endl;
+
+}
+/*
+ *	判断两个链表是否相交（链表不带环）
+ *		将链表1 首尾相接， 转化成判断 链表2 是否带环问题
+ *		*/
+ 
+
+//单链表部分逆置
+//Node* RolloverList(Node* list,int k)
+//list 无头结点
+//1->2->3->4->5  k=2   翻转后： 2-1->4->3->5
+// 思路： 小部分翻转，各个部分拼接
+pNode RolloverList(pNode list,int k);
+{
+	int count = k;
+	
 }
 int main()
 {
 //	Test1();
 //	Test2();
 //	TestQuickSort();	
-	TestBub();
+//	TestBub();
+//    TestNoHead_NonepHead();
+//	Test_Res();
+//	TestMerge();
+//	TestFindMid();
+//	TestFindlast_K();
+//	TestIsring();
+	TestFindPort();
 	return 0;
 }

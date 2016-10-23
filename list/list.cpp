@@ -509,10 +509,17 @@ pNode FindPort(pNode pHead)
 	//环长
 	pNode cir_len =slow;
 	int count = 1;
+<<<<<<< 48f6125a39d1ecd6b029c5968c7181885c64ad86
+	slow = slow->_next;
+	while( slow != cir_len && ++count)
+	{
+		slow = slow->_next;
+=======
 	cir_len = cir_len->_next;
 	while( slow != cir_len && ++count)
 	{
 		cir_len = cir_len->_next;
+>>>>>>> 修正了部分逆置的bug，原来是测试函数没有写对，注意返回值
 	}
 	cout<<"circle lenth:>"<<count<<endl;
 	return slow;
@@ -534,6 +541,12 @@ void TestFindPort()
 
 }
 /*
+<<<<<<< 48f6125a39d1ecd6b029c5968c7181885c64ad86
+ *	判断两个链表是否相交（链表不带环）
+ *		将链表1 首尾相接， 转化成判断 链表2 是否带环问题
+ *		*/
+ 
+=======
  *	判断两个链表是否相交（链表不带环）并找出交点
  *	思路1:    如果他们相交的话，那么他们最后的一个节点一定是相同的，否则是不相交的。因此判断两个链表是否相交就很简单了，分别遍历到两个链表的尾部，然后判断他们是否相同，如果相同，则相交；否则不相交。
  *  思路2		将链表1 首尾相接， 转化成判断 链表2 是否带环问题
@@ -757,12 +770,19 @@ void TestJ()
 	cout<<Joswohus(9,2)<<endl;
 }
 
+>>>>>>> 修正了部分逆置的bug，原来是测试函数没有写对，注意返回值
 
 //单链表部分逆置
 //Node* RolloverList(Node* list,int k)
 //list 无头结点
 //1->2->3->4->5  k=2   翻转后： 2-1->4->3->5
 // 思路： 小部分翻转，各个部分拼接
+<<<<<<< 48f6125a39d1ecd6b029c5968c7181885c64ad86
+pNode RolloverList(pNode list,int k);
+{
+	int count = k;
+	
+=======
 pNode RolloverList(pNode pHead,int k)
 {
 	if(pHead == NULL || pHead->_next == NULL || k <= 1)
@@ -810,6 +830,7 @@ void TestRolloverList()
 	show(a);
 	pNode list = RolloverList(a,2);
 	show(list);
+>>>>>>> 修正了部分逆置的bug，原来是测试函数没有写对，注意返回值
 }
 int main()
 {
@@ -817,15 +838,24 @@ int main()
 //	Test2();
 //	TestQuickSort();	
 //	TestBub();
+<<<<<<< 48f6125a39d1ecd6b029c5968c7181885c64ad86
+//    TestNoHead_NonepHead();
+=======
 //  TestNoHead_NonepHead();
+>>>>>>> 修正了部分逆置的bug，原来是测试函数没有写对，注意返回值
 //	Test_Res();
 //	TestMerge();
 //	TestFindMid();
 //	TestFindlast_K();
+<<<<<<< 48f6125a39d1ecd6b029c5968c7181885c64ad86
+//	TestIsring();
+	TestFindPort();
+=======
 //	TestIsring()
 //	TestFindPort();
 //	TestTwolist_is_point();
 	TestRolloverList();
 //	TestJ();
+>>>>>>> 修正了部分逆置的bug，原来是测试函数没有写对，注意返回值
 	return 0;
 }
